@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PruebaBQEvernote</string>
+    <string name="action_settings">Menú</string>
+    <string name="action_example">Example action</string>
+    <string name="header_login_screen">Por favor, para iniciar sesión introduzca su Usuario y Contraseña de Evernote:</string>
+    <string name="header_username_text">Usuario</string>
+    <string name="header_password_text">Contraseña</string>
+    <string name="send_credentials_button_text">Logout Evernote</string>
+    <string name="add_note">Add Note</string>
+    <string name="sort_notes">Sort Note</string>
+    <string name="auth_log_error">Datos introducidos incorrectos. Por favor, vuelva a introducirlos</string>
+    <string name="newnotetitle">Note Title</string>
+    <string name="newnotecontent">Note Content</string>
+    <string name="save_note_button">Save Note</string> 
+    <string name="label_select_notebook_button">Select Notebook</string>
+    <string name="error_listing_notebooks">Error Listing Notebooks</string>
+    <string name="error_creating_notestore">Error Creating Note</string>
+    <string name="dialog_positive_button">OK</string>
+    <string name="error_saving_note">Error Saving Note</string>
+    <string name="note_saved">Note successfully saved</string>    
+</resources>
