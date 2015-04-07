@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,7 +32,7 @@ public class LoginScreenActivity extends Activity {
 
 	private EditText passwordfield;
 
-	private Button sendcredentialsButton;
+	private Button logoutbutton;
 	
 	private Button buttonAddNote;
 	
@@ -50,8 +48,6 @@ public class LoginScreenActivity extends Activity {
 	
 	private int idButtonAddNote,idButtonSortNotes, idButtonLogout;
 
-	// private SharedPreferences mSharedPreferences;
-
 	private ArrayAdapter mAdapter;
 
 	private ListView mListView;
@@ -62,24 +58,6 @@ public class LoginScreenActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-//			Intent intentToShowNotes = new Intent(mContext,
-//					ShowNotesActivity.class);
-//			// intentToShowNotes.putExtra();
-//			startActivity(intentToShowNotes);
-
-			// switch(position) {
-			// case 0:
-			// startActivity(new Intent(getApplicationContext(),
-			// ImagePicker.class));
-			// break;
-			// case 1:
-			// startActivity(new Intent(getApplicationContext(),
-			// SimpleNote.class));
-			// break;
-			// case 2:
-			// startActivity(new Intent(getApplicationContext(),
-			// SearchNotes.class));
-			// }
 		}
 	};
 	
@@ -90,10 +68,14 @@ public class LoginScreenActivity extends Activity {
 			if(v.getId() == buttonAddNote.getId()){
 				startActivity(new Intent(getApplicationContext(),
 						 AddNoteActivity.class));
-			} else if (v.getId() == buttonSortNotes.getId()){
-				
-			} else	{
-				
+			} else if (v.getId() == logoutbutton.getId()){
+				 try {
+					mEvernoteSession.logOut(mContext);
+					finish();
+				} catch (InvalidAuthenticationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	};
@@ -106,13 +88,13 @@ public class LoginScreenActivity extends Activity {
 
 		mContext = this;
 		
-		
-
 		mListView = (ListView) findViewById(R.id.notes_list);
 		
 		buttonAddNote = (Button)findViewById(R.id.add_note);
 		
 		buttonSortNotes = (Button)findViewById(R.id.filter); 
+		
+		logoutbutton = (Button)findViewById(R.id.send_credentials);
 
 		mEvernoteSession = EvernoteSession.getInstance(mContext,
 				DataUtils.CONSUMER_KEY, DataUtils.CONSUMER_SECRET,
@@ -126,27 +108,14 @@ public class LoginScreenActivity extends Activity {
 		mListView.setOnItemClickListener(mItemClickListener);
 		
 		buttonAddNote.setOnClickListener(mOnClickListener);
+		logoutbutton.setOnClickListener(mOnClickListener);
 		
-//		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		// updateAuthUi();
 	}
-
-	// private void updateAuthUi() {
-	// //show login button if logged out
-	// mLoginButton.setEnabled(!mEvernoteSession.isLoggedIn());
-	//
-	// //Show logout button if logged in
-	// // mLogoutButton.setEnabled(mEvernoteSession.isLoggedIn());
-	//
-	// //disable clickable elements until logged in
-	// mListView.setEnabled(mEvernoteSession.isLoggedIn());
-	// }
 
 	public void login(View view) {
 		mEvernoteSession.authenticate(this);
@@ -158,16 +127,12 @@ public class LoginScreenActivity extends Activity {
 		} catch (InvalidAuthenticationException e) {
 			e.printStackTrace();
 		}
-		// Log.e(LOGTAG, "Tried to call logout with not logged in", e);
-		// }
-		// updateAuthUi();
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		// Update UI when oauth activity returns result
 		case EvernoteSession.REQUEST_CODE_OAUTH:
 			if (resultCode == Activity.RESULT_OK) {
 				try {
@@ -175,17 +140,12 @@ public class LoginScreenActivity extends Activity {
 				} catch (TTransportException e) {
 					e.printStackTrace();
 				}
-				// showNotesFromUser(data);
 			} else {
 				Toast.makeText(mContext, R.string.auth_log_error,
 						Toast.LENGTH_LONG).show();
 			}
 			break;
 		}
-	}
-
-	private void showNotesFromUser(Intent data) {
-
 	}
 
 	public void listNotebooks() throws TTransportException {
@@ -213,22 +173,13 @@ public class LoginScreenActivity extends Activity {
 						@Override
 						public void onException(Exception exception) {
 							exception.printStackTrace();
-							// Log.e(LOGTAG, "Error retrieving notebooks",
-							// exception);
 						}
 					});
 		}
 	}
 	
-//	public void listNotes() throws TTransportException {
-//		if (mEvernoteSession.isLoggedIn()) {
-//			mEvernoteSession.getClientFactory().createNoteStoreClient().
-//					.
-//	}
 
 	 public void addNotesItems(String names) {
-	
-//	 listNotes.add("Clicked : "+clickCounter++);
 		 listNotes.add(names);
 		 mAdapter.notifyDataSetChanged();
 	 }

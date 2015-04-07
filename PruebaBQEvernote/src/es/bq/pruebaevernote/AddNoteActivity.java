@@ -1,3 +1,29 @@
+/*
+ * Copyright 2012 Evernote Corporation
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package es.bq.pruebaevernote;
 
 import java.util.List;
@@ -30,8 +56,6 @@ public class AddNoteActivity extends CredentialsActivity {
 
 	private String mSelectedNotebookGuid;
 
-	// Callback used as a result of creating a note in a normal notebook or a
-	// linked notebook
 	private OnClientCallback<Note> mNoteCreateCallback = new OnClientCallback<Note>() {
 		@Override
 		public void onSuccess(Note note) {
@@ -63,20 +87,16 @@ public class AddNoteActivity extends CredentialsActivity {
 		String title = mEditTextTitle.getText().toString();
 		String content = mEditTextContent.getText().toString();
 		if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
-			// Toast.makeText(getApplicationContext(),
-			// R.string.empty_content_error, Toast.LENGTH_LONG).show();
 			return;
 		}
 
 		Note note = new Note();
 		note.setTitle(title);
 
-		// TODO: line breaks need to be converted to render in ENML
 		note.setContent(EvernoteUtil.NOTE_PREFIX + content
 				+ EvernoteUtil.NOTE_SUFFIX);
 
 		if (!mEvernoteSession.getAuthenticationResult().isAppLinkedNotebook()) {
-			// If User has selected a notebook guid, assign it now
 			if (!TextUtils.isEmpty(mSelectedNotebookGuid)) {
 				note.setNotebookGuid(mSelectedNotebookGuid);
 			}
